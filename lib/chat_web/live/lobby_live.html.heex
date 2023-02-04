@@ -1,0 +1,35 @@
+<h1>Lobby</h1>
+<div id="chat" style="border: 1px solid black; padding: 20px;">
+    <ul style="list-style-type: none;">
+        <%= for room <- @rooms do %>
+            <li>
+                  <a href={"/room/#{room}/#{@user}"}
+                    phx-click="private_room"
+                    phx-value-room={room}
+                    ><%= room %></a>
+            </li>
+        <% end %>
+    </ul>
+</div>
+
+
+<div id="new_room" style="padding: 2em 0em 0em 0em; clear: both;">
+    <.form let={f} for={:new_room} as={:new_room} phx-submit="new_room">
+        <%= label f, :room %>
+        <%= text_input f, :room, placeholder: "Write a new name" %>
+        <%= error_tag f, :room %>
+
+        <%= submit "Create room", phx_disable_with: "Send..." %>
+    </.form>
+</div>
+
+
+<div id="new_user" style="padding: 2em 0em 0em 0em; clear: both;">
+    <.form let={f} for={:new_user} as={:new_user} phx-submit="new_user">
+        <%= label f, :username %>
+        <%= text_input f, :username, placeholder: "Write your username" %>
+        <%= error_tag f, :username %>
+
+        <%= submit "Create", phx_disable_with: "Send..." %>
+    </.form>
+</div>

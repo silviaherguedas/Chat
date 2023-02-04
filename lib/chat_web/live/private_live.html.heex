@@ -1,0 +1,21 @@
+<h1><%= @user %> to <%= @username_target %></h1>
+<div id="chat" style="border: 1px solid black; padding: 20px;">
+    <ul style="list-style-type: none;">
+        <%= for {user, message} <- @messages do %>
+            <li>
+                <strong><%= user %>: </strong>
+                <%= message %>
+            </li>
+        <% end %>
+    </ul>
+</div>
+
+<div id="send_message" style="padding: 2em 0em 0em 0em; clear: both;">
+    <.form let={f} for={:send_message} as={:send_message} phx-submit="send_message">
+        <%= label f, :message %>
+        <%= text_input f, :message, placeholder: "Write a message" %>
+        <%= error_tag f, :message %>
+
+        <%= submit "Send message", phx_disable_with: "Send..." %>
+    </.form>
+</div>

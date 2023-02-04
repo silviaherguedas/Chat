@@ -1,0 +1,39 @@
+<h1><%= @room %></h1>
+<div id="chat" style="border: 1px solid black; padding: 20px; margin: 0em 2em 0em 0em; float: left; width: 69%;">
+    <ul style="list-style-type: none;">
+        <%= for {user, message} <- @messages do %>
+            <li>
+                <strong><%= user %>: </strong>
+                <%= message %>
+            </li>
+        <% end %>
+    </ul>
+</div>
+
+<div id="users" style="border: 1px solid black; padding: 20px; float: left; width: 25%;">
+    <ul style="list-style-type: none;">
+        <%= for user <- @users do %>
+            <li>
+                <%= if @user == user do %>
+                    <%= user %>
+                <% else %>
+                  <a href={"/private/#{@user}/#{user}"}
+                    phx-click="private_room"
+                    phx-value-username_target={user}
+                    ><%= user %></a>
+                <% end %>
+                
+            </li>
+        <% end %>
+    </ul>
+</div>
+
+<div id="send_message" style="padding: 2em 0em 0em 0em; clear: both;">
+    <.form let={f} for={:send_message} as={:send_message} phx-submit="send_message">
+        <%= label f, :message %>
+        <%= text_input f, :message, placeholder: "Write a message" %>
+        <%= error_tag f, :message %>
+
+        <%= submit "Send message", phx_disable_with: "Send..." %>
+    </.form>
+</div>
