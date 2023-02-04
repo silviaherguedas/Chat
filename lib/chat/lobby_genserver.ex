@@ -12,7 +12,7 @@ defmodule Chat.LobbyGenserver do
     GenServer.cast(__MODULE__, {:create_room, name})
   end
 
-  @spec join(pid()) :: :ok
+  @spec join(pid()) :: term
   def join(pid) do
     GenServer.call(__MODULE__, {:join, pid})
   end
@@ -51,14 +51,7 @@ defmodule Chat.LobbyGenserver do
   def handle_call({:join, pid}, _from, state) do
     state = %{state | pids: MapSet.put(state.pids, pid)}
     IO.inspect(state, label: "LobbyGS.join.state")
+
     {:reply, state.rooms, state}
-    # if pid not in state.pids do
-    #   state = %{state | pids: [pid | state.pids]}
-    #   IO.inspect(state, label: "LobbyGS.join.state")
-    #   {:noreply, state}
-    # else
-    #   IO.inspect(state, label: "LobbyGS.join.state")
-    #   {:noreply, state}
-    # end
   end
 end

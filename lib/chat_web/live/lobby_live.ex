@@ -19,7 +19,7 @@ defmodule ChatWeb.LobbyLive do
   @impl Phoenix.LiveView
   def handle_event("new_room", value, socket) do
     IO.inspect(value, label: "LobbyLive.new_room.value")
-    IO.inspect(socket.assigns, label: "LobbyLive.new_room.socket")
+    IO.inspect(socket.assigns, label: "LobbyLive.new_room.socket.assigns")
 
     LobbyGenserver.create_room(value["new_room"]["room"])
 
@@ -28,15 +28,18 @@ defmodule ChatWeb.LobbyLive do
 
   @impl Phoenix.LiveView
   def handle_event("new_user", value, socket) do
+    socket = assign(socket, :user, value["new_user"]["username"])
     IO.inspect(value, label: "LobbyLive.new_user.value")
-    IO.inspect(socket, label: "LobbyLive.new_user.socket")
-    {:noreply, assign(socket, :user, value["new_user"]["username"])}
+    IO.inspect(socket.assigns, label: "LobbyLive.new_user.socket.assigns")
+    {:noreply, socket}
   end
 
   @impl Phoenix.LiveView
   def handle_info({:create_room, name}, socket) do
-    IO.inspect(socket, label: "LobbyLive.create_room.socket")
+    socket = assign(socket, :rooms, MapSet.put(socket.assigns.rooms, name))
 
-    {:noreply, assign(socket, :rooms, [name | socket.assigns])}
+    IO.inspect(socket.assigns, label: "LobbyLive.create_room.socket.assigns")
+
+    {:noreply, socket}
   end
 end
